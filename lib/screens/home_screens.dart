@@ -1,5 +1,6 @@
 import 'package:direct_deal/model/products_lists.dart';
 import 'package:direct_deal/screens/product_details_screen.dart';
+import 'package:direct_deal/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreens extends StatefulWidget {
@@ -41,10 +42,19 @@ class _HomeScreensState extends State<HomeScreens> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Icon(Icons.menu, size: 30),
-                    const CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                        "https://randomuser.me/api/portraits/men/32.jpg",
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.black12, // subtle overlay
+                          builder: (context) => const ProfileScreen(),
+                        );
+                      },
+                      child: const CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          "https://randomuser.me/api/portraits/men/32.jpg",
+                        ),
                       ),
                     ),
                   ],
