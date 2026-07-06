@@ -10,132 +10,239 @@ class HomeScreens extends StatefulWidget {
 }
 
 class _HomeScreensState extends State<HomeScreens> {
+  int _selectedCategoryIndex = 1; // Default to Shoes
+
+  final List<String> categories = [
+    "T-Shirt",
+    "Shoes",
+    "Jacket",
+    "Suit",
+    "Watch",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Direct Deal"), centerTitle: true),
-
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
-              children: [
-                const Text(
-                  "Embrodiary Clothes",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      backgroundColor: const Color(
+        0xFFFAF9F6,
+      ), // Off-white background matching design
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Custom AppBar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
                 ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.menu, size: 30),
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(
+                        "https://randomuser.me/api/portraits/men/32.jpg",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                const Spacer(),
+              // Search Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      hintText: "What are you looking for?",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                  ),
+                ),
+              ),
 
-                TextButton(onPressed: () {}, child: const Text("View All")),
-              ],
-            ),
-          ),
+              const SizedBox(height: 15),
 
-          SizedBox(
-            height: 280,
-
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: embroideryList.length,
-
-              itemBuilder: (context, index) {
-                final embroidery = embroideryList[index];
-
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ProductDetails(product: embroidery),
+              // Categories
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final isSelected = _selectedCategoryIndex == index;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedCategoryIndex = index;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 25),
+                        child: Text(
+                          categories[index],
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            color: isSelected ? Colors.black : Colors.grey,
+                          ),
+                        ),
                       ),
                     );
                   },
+                ),
+              ),
 
-                  child: Container(
-                    width: 170,
-                    margin: const EdgeInsets.only(left: 16),
+              const SizedBox(height: 25),
 
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+              // Product List
+              SizedBox(
+                height: 350,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  itemCount: shoeList.length,
+                  itemBuilder: (context, index) {
+                    final shoe = shoeList[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ProductDetails(product: shoe),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 220,
+                        margin: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 20,
                         ),
-                      ],
-                    ),
-
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-
-                      children: [
-                        Hero(
-                          tag: embroidery.id,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 15,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            // "Hot" Text and Title
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Hot",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    shoe.title,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.2,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
 
-                            child: Image.network(
-                              embroidery.imageUrl,
-                              height: 170,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
+                            // Image
+                            Positioned(
+                              top: 90,
+                              left: -30,
+                              right: -30,
+                              child: Hero(
+                                tag: shoe.id,
+                                child: Transform.rotate(
+                                  angle: -0.3,
+                                  child: Image.network(
+                                    shoe.imageUrl,
+                                    height: 150,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+
+                            // Price and Buy Button
+                            Positioned(
+                              bottom: 20,
+                              left: 20,
+                              right: 20,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "\$${shoe.price.toInt()}",
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Text(
+                                      ">",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                embroidery.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              const SizedBox(height: 6),
-
-                              Text(
-                                "\$${embroidery.price}",
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                ),
-                              ),
-
-                              const SizedBox(height: 6),
-
-                              Text(
-                                "${embroidery.sizes.length} Sizes Available",
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

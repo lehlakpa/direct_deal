@@ -2,17 +2,26 @@ import 'package:direct_deal/model/products_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProductDetails extends StatelessWidget {
-  final Embroidery product;
+class ProductDetails extends StatefulWidget {
+  final Shoe product;
 
   const ProductDetails({super.key, required this.product});
 
-  Future<void> openWhatsApp(Embroidery product) async {
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
+  int _selectedColorIndex = 0;
+  int _selectedSizeIndex = 1;
+
+  Future<void> openWhatsApp(Shoe product) async {
     final message = Uri.encodeComponent(
       "Hello, I would like to order:\n\n"
       "Design: ${product.title}\n"
       "Price: \$${product.price}\n"
-      "Size: ${product.sizes.join(', ')}",
+      "Size: ${product.sizes[_selectedSizeIndex]}\n"
+      "Color: ${product.colors[_selectedColorIndex]}",
     );
 
     final url = Uri.parse("https://wa.me/9779709047193?text=$message");
@@ -22,12 +31,13 @@ class ProductDetails extends StatelessWidget {
     }
   }
 
-  Future<void> openViber(Embroidery product) async {
+  Future<void> openViber(Shoe product) async {
     final message = Uri.encodeComponent(
       "Hello, I would like to order:\n\n"
       "Design: ${product.title}\n"
       "Price: \$${product.price}\n"
-      "Size: ${product.sizes.join(', ')}",
+      "Size: ${product.sizes[_selectedSizeIndex]}\n"
+      "Color: ${product.colors[_selectedColorIndex]}",
     );
 
     final url = Uri.parse("viber://forward?text=$message");
@@ -37,163 +47,308 @@ class ProductDetails extends StatelessWidget {
     }
   }
 
+  void _showOrderSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(25),
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "Order Now",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        openViber(widget.product);
+                      },
+                      icon: const Icon(Icons.call),
+                      label: const Text("Viber"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7360F2),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        openWhatsApp(widget.product);
+                      },
+                      icon: const Icon(Icons.chat),
+                      label: const Text("WhatsApp"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF25D366),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Hero(
-            tag: product.id,
-            child: Image.network(
-              product.imageUrl,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          SafeArea(
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-
-          DraggableScrollableSheet(
-            initialChildSize: .45,
-            minChildSize: .45,
-            maxChildSize: .90,
-
-            builder: (context, controller) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      backgroundColor: const Color(0xFFFAF9F6),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 15,
                 ),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.arrow_back, size: 30),
+                ),
+              ),
 
-                child: SingleChildScrollView(
-                  controller: controller,
+              // Title and Image
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.product.title,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        height: 1.1,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
 
-                  padding: const EdgeInsets.all(20),
-
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      Center(
-                        child: Container(
-                          height: 5,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
+                    Hero(
+                      tag: widget.product.id,
+                      child: Transform.rotate(
+                        angle: -0.2,
+                        child: Center(
+                          child: Image.network(
+                            widget.product.imageUrl,
+                            height: 250,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
+                    ),
 
-                      const SizedBox(height: 25),
+                    const SizedBox(height: 30),
 
-                      Text(
-                        product.title,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                    Text(
+                      widget.product.description,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+
+              // Bottom Section (No Background)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+
+                    // Color selection
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 50,
+                          child: Text(
+                            "Color",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      Text(
-                        "\$${product.price}",
-                        style: const TextStyle(
-                          fontSize: 26,
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      Text(
-                        product.description,
-                        style: const TextStyle(fontSize: 17, height: 1.5),
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      const Text(
-                        "Available Sizes",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-
-                        children: product.sizes.map((size) {
-                          return Chip(label: Text(size));
-                        }).toList(),
-                      ),
-
-                      const SizedBox(height: 35),
-
-                      SizedBox(
-                        width: double.infinity,
-                        height: 55,
-
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () => openWhatsApp(product),
-                                icon: const Icon(Icons.chat),
-                                label: const Text("WhatsApp"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF25D366),
-                                  foregroundColor: Colors.white,
-                                  minimumSize: const Size.fromHeight(55),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: List.generate(
+                            widget.product.colors.length,
+                            (index) => GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedColorIndex = index;
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 15),
+                                padding: const EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: _selectedColorIndex == index
+                                        ? Colors.grey
+                                        : Colors.transparent,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    color: widget.product.colors[index],
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
                               ),
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
 
-                            const SizedBox(width: 12),
+                    const SizedBox(height: 25),
 
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () => openViber(product),
-                                icon: const Icon(Icons.call),
-                                label: const Text("Viber"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF7360F2),
-                                  foregroundColor: Colors.white,
-                                  minimumSize: const Size.fromHeight(55),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                    // Size selection
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 50,
+                          child: Text(
+                            "Size",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: List.generate(widget.product.sizes.length, (
+                            index,
+                          ) {
+                            final isSelected = _selectedSizeIndex == index;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedSizeIndex = index;
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 15),
+                                width: 40,
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.black
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? Colors.black
+                                        : Colors.grey[300]!,
                                   ),
                                 ),
+                                child: Text(
+                                  widget.product.sizes[index]
+                                      .toString()
+                                      .replaceAll(RegExp(r'\.0$'), ''),
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 35),
+
+                    // Price and Order Now Button at the bottom
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "\$${widget.product.price.toInt()}",
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
+                        ElevatedButton(
+                          onPressed: _showOrderSheet,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text(
+                            "Order Now",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
-              );
-            },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

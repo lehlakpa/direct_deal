@@ -1,105 +1,54 @@
-class Embroidery {
+import 'package:flutter/material.dart';
+
+class Shoe {
   final int id;
   final String title;
   final String description;
   final double price;
-  final List<String> sizes;
+  final List<double> sizes;
+  final List<Color> colors;
   final String imageUrl;
 
-  Embroidery({
+  Shoe({
     required this.id,
     required this.title,
     required this.description,
     required this.price,
     required this.sizes,
+    required this.colors,
     required this.imageUrl,
   });
 }
 
-final List<Embroidery> embroideryList = [
-  Embroidery(
+final List<Shoe> shoeList = [
+  Shoe(
     id: 1,
-    title: "Rose Bouquet",
+    title: "Nike Air Infuriate III",
     description:
-        "Beautiful handcrafted rose embroidery perfect for dresses and home décor.",
-    price: 12.99,
-    sizes: ["4×4", "5×7", "6×10"],
-    imageUrl: "https://picsum.photos/id/1011/800/900",
+        "The Nike Air Infuriate III pays homage to the women who are setting an example for the next generation by being forces of change in their.",
+    price: 139.0,
+    sizes: [6, 7.5, 8],
+    colors: [Colors.blue, Colors.orange, Colors.red],
+    imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   ),
-  Embroidery(
+  Shoe(
     id: 2,
-    title: "Sunflower Garden",
-    description: "Bright sunflower embroidery with rich stitching details.",
-    price: 14.99,
-    sizes: ["5×7", "6×8", "8×10"],
-    imageUrl: "https://picsum.photos/id/1025/800/900",
+    title: "Sepats Air Max",
+    description:
+        "Experience incredible comfort with the Sepats Air Max. Engineered for all-day performance and style.",
+    price: 210.0,
+    sizes: [7, 8, 9, 10],
+    colors: [Colors.teal, Colors.black, Colors.grey],
+    imageUrl: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   ),
-  Embroidery(
+  Shoe(
     id: 3,
-    title: "Peacock Feather",
-    description: "Elegant peacock feather embroidery featuring vibrant colors.",
-    price: 18.99,
-    sizes: ["6×10", "8×8", "9×12"],
-    imageUrl: "https://picsum.photos/id/1035/800/900",
-  ),
-  Embroidery(
-    id: 4,
-    title: "Butterfly Dreams",
-    description: "Delicate butterfly embroidery ideal for children's clothing.",
-    price: 10.99,
-    sizes: ["4×4", "5×5"],
-    imageUrl: "https://picsum.photos/id/1043/800/900",
-  ),
-  Embroidery(
-    id: 5,
-    title: "Traditional Mandala",
-    description: "Intricate mandala embroidery inspired by traditional art.",
-    price: 19.99,
-    sizes: ["5×5", "6×6", "8×8", "10×10"],
-    imageUrl: "https://picsum.photos/id/1050/800/900",
-  ),
-  Embroidery(
-    id: 6,
-    title: "Cherry Blossom",
+    title: "Nike Joyride Run",
     description:
-        "Japanese-inspired cherry blossom embroidery with soft colors.",
-    price: 15.49,
-    sizes: ["4×4", "5×7", "7×9"],
-    imageUrl: "https://picsum.photos/id/1067/800/900",
-  ),
-  Embroidery(
-    id: 7,
-    title: "Cute Teddy Bear",
-    description:
-        "Adorable teddy bear embroidery for baby clothing and blankets.",
-    price: 11.99,
-    sizes: ["3×3", "4×4", "5×5"],
-    imageUrl: "https://picsum.photos/id/1074/800/900",
-  ),
-  Embroidery(
-    id: 8,
-    title: "Lotus Flower",
-    description:
-        "Elegant lotus flower embroidery representing peace and purity.",
-    price: 16.99,
-    sizes: ["5×7", "6×10", "8×12"],
-    imageUrl: "https://picsum.photos/id/1084/800/900",
-  ),
-  Embroidery(
-    id: 9,
-    title: "Christmas Wreath",
-    description:
-        "Festive embroidery perfect for Christmas decorations and gifts.",
-    price: 13.99,
-    sizes: ["4×4", "5×7", "6×6"],
-    imageUrl: "https://picsum.photos/id/1080/800/900",
-  ),
-  Embroidery(
-    id: 10,
-    title: "Vintage Lace Border",
-    description: "Classic lace border embroidery for tablecloths and garments.",
-    price: 21.99,
-    sizes: ["6×10", "8×12", "10×14"],
-    imageUrl: "https://picsum.photos/id/1062/800/900",
+        "A running shoe like no other. Tiny foam beads underfoot conform to your foot for cushioning that stands up to your mileage.",
+    price: 180.0,
+    sizes: [6.5, 7.5, 8.5, 9.5],
+    colors: [Colors.white, Colors.pink, Colors.blueAccent],
+    imageUrl: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   ),
 ];
