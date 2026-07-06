@@ -2,7 +2,8 @@ import 'package:direct_deal/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
-import 'home_screens.dart';
+import 'custom_notification_screen.dart';
+import '../main.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -49,12 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result == null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreens()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
-      ScaffoldMessenger.of(
+      await CustomNotificationScreen.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(result)));
+        message: result,
+        type: NotificationType.error,
+      );
     }
   }
 

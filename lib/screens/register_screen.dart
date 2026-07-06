@@ -1,6 +1,7 @@
 import 'package:direct_deal/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'custom_notification_screen.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -70,21 +71,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!mounted) return;
 
     if (result == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Registration Successful"),
-          backgroundColor: Colors.green,
-        ),
+      await CustomNotificationScreen.show(
+        context,
+        message: "Registration successful! Please login.",
+        type: NotificationType.success,
       );
-
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     } else {
-      ScaffoldMessenger.of(
+      await CustomNotificationScreen.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(result)));
+        message: result,
+        type: NotificationType.error,
+      );
     }
   }
 

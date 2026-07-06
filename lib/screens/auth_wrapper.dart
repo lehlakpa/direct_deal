@@ -1,7 +1,7 @@
-import 'package:direct_deal/screens/home_screens.dart';
 import 'package:direct_deal/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
@@ -18,7 +18,7 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          return const HomeScreens();
+          return const MainScreen();
         }
 
         return const LoginScreen();
