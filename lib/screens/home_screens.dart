@@ -1,6 +1,7 @@
 import 'package:direct_deal/model/products_lists.dart';
 import 'package:direct_deal/screens/product_details_screen.dart';
 import 'package:direct_deal/screens/profile_screen.dart';
+import 'package:direct_deal/widget/home_header.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreens extends StatefulWidget {
@@ -13,13 +14,13 @@ class HomeScreens extends StatefulWidget {
 class _HomeScreensState extends State<HomeScreens> {
   int _selectedCategoryIndex = 1; // Default to Shoes
 
-  final List<String> categories = [
-    "T-Shirt",
-    "Shoes",
-    "Jacket",
-    "Suit",
-    "Watch",
-  ];
+  // final List<String> categories = [
+  //   "T-Shirt",
+  //   "Shoes",
+  //   "Jacket",
+  //   "Suit",
+  //   "Watch",
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -83,43 +84,41 @@ class _HomeScreensState extends State<HomeScreens> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 15),
-
-              // Categories
-              SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final isSelected = _selectedCategoryIndex == index;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedCategoryIndex = index;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 25),
-                        child: Text(
-                          categories[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.w500,
-                            color: isSelected ? Colors.black : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 25),
+              const HomeHeader(),
+              // // Categories
+              // SizedBox(
+              //   height: 40,
+              //   child: ListView.builder(
+              //     scrollDirection: Axis.horizontal,
+              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+              //     itemCount: categories.length,
+              //     itemBuilder: (context, index) {
+              //       final isSelected = _selectedCategoryIndex == index;
+              //       return GestureDetector(
+              //         onTap: () {
+              //           setState(() {
+              //             _selectedCategoryIndex = index;
+              //           });
+              //         },
+              //         child: Padding(
+              //           padding: const EdgeInsets.only(right: 25),
+              //           child: Text(
+              //             categories[index],
+              //             style: TextStyle(
+              //               fontSize: 16,
+              //               fontWeight: isSelected
+              //                   ? FontWeight.bold
+              //                   : FontWeight.w500,
+              //               color: isSelected ? Colors.black : Colors.grey,
+              //             ),
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
+              // const SizedBox(height: 25),
 
               // Product List
               SizedBox(
@@ -232,12 +231,10 @@ class _HomeScreensState extends State<HomeScreens> {
                                       color: Colors.black,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: const Text(
-                                      ">",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    child: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                      size: 22,
                                     ),
                                   ),
                                 ],
